@@ -23,8 +23,8 @@ Log::Log4perl::Appender::Fluent - log appender writing to Fluentd
 Log::Log4perl::Appender::Fluent is a L<Log::Log4perl(3)> appender plugin that
 provides output to Fluentd daemon. The plugin supports sending simple string
 messages, but it works way better when is provided with
-L<Log::Message::JSON(3)> object, because the structure of the message will be
-preserved.
+L<Log::Message::JSON(3)> or L<Log::Message::Structured(3)> object, because the
+structure of the message will be preserved.
 
 =cut
 
@@ -39,7 +39,7 @@ use Sys::Hostname;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 #-----------------------------------------------------------------------------
 
@@ -67,8 +67,8 @@ due to default values, TCP communication will take place.
 =item I<message_field> (default: C<message>)
 
 Communication with Fluentd imposes using hashes as messages. This option
-tells how should be named key if the message is not a L<Log::Message::JSON(3)>
-object.
+tells how should be named key if the message is not
+a L<Log::Message::JSON(3)>/L<Log::Message::Structured(3)> object.
 
 =item I<hostname_field> (default: I<none>)
 
@@ -140,6 +140,13 @@ sub log {
     # NOTE: the resulting hash(ref) should be tied to Tie::IxHash, but there's
     # a bug in Data::MessagePack 0.38 (XS version)
     $msg = { %$msg };
+  } elsif (eval { $msg->DOES("Log::Message::Structured") }) {
+    # Log::Message::Structured support
+    # such a message:
+    #   * is a Moose object
+    #   * has Log::Message::Structured role
+    #   * has method as_hash()
+    $msg = $msg->as_hash;
   } else {
     $msg = { $self->{message_field} => $msg };
   }
@@ -191,7 +198,8 @@ See http://dev.perl.org/licenses/ for more information.
 
 =head1 SEE ALSO
 
-http://fluentd.org/, L<Log::Log4perl(3)>, L<Log::Message::JSON(3)>.
+http://fluentd.org/, L<Log::Log4perl(3)>, L<Log::Message::JSON(3)>,
+L<Log::Message::Structured(3)>.
 
 =cut
 

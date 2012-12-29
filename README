@@ -9,8 +9,9 @@ and only process flat strings.
 
 Log::Log4perl::Appender::Fluent is a Log::Log4perl appender plugin that
 provides output to Fluentd daemon. The plugin supports sending simple string
-messages, but it works way better when is provided with Log::Message::JSON
-object, because the structure of the message will be preserved.
+messages, but it works way better when is provided with Log::Message::JSON or
+Log::Message::Structured object, because the structure of the message will be
+preserved.
 
 
 INSTALLATION
