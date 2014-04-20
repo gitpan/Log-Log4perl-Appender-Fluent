@@ -1,5 +1,9 @@
 Revision history for Log::Log4perl::Appender::Fluent
 
+0.04    Sun Apr 20 04:51:41 CEST 2014
+        Maintenance update: disabled release tests when YAML module was not
+        found.
+
 0.03    Sun Apr 13 22:37:43 CEST 2014
         Maintenance update: change "name" field in META.yml
 

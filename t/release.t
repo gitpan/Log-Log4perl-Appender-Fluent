@@ -7,7 +7,9 @@ use strict;
 use warnings;
 use Test::More;
 use ExtUtils::MakeMaker;
-use YAML;
+
+eval "use YAML";
+plan skip_all => "YAML required for author tests" if $@;
 
 if ($ENV{RELEASE_TESTING}) {
   plan(tests => 3);
